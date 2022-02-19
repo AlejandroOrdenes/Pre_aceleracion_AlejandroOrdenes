@@ -15,7 +15,7 @@ public class GenreEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    private String iamge;
+    private String image;
 
     private String name;
 }
