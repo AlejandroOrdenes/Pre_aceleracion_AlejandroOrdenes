@@ -9,15 +9,13 @@ import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "movie")
 @Getter
 @Setter
-@SQLDelete(sql = "UPDATE icon SET deleted = true WHERE id=?")
+@SQLDelete(sql = "UPDATE movie SET deleted = true WHERE id=?")
 @Where(clause = "deleted=false ")
 public class MovieEntity {
 
@@ -37,7 +35,7 @@ public class MovieEntity {
     private boolean deleted = Boolean.FALSE;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "genre_id",insertable = true, updatable = true)
+    @JoinColumn(name = "genre_id",insertable = false, updatable = false)
     private GenreEntity genre;
 
     @Column(name = "genre_id", nullable = false)

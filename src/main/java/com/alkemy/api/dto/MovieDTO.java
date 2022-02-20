@@ -22,6 +22,6 @@ public class MovieDTO {
 
     private int rating;
 
-    private GenreEntity genreId;
+    private Long genreId;
 
 }

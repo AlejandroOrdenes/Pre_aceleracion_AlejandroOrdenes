@@ -1,8 +1,6 @@
 package com.alkemy.api.mapper;
 
-import com.alkemy.api.dto.GenreDTO;
 import com.alkemy.api.dto.MovieDTO;
-import com.alkemy.api.entity.GenreEntity;
 import com.alkemy.api.entity.MovieEntity;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +15,7 @@ public class MovieMapper {
         movieEntity.setImage(dto.getImage());
         movieEntity.setRating(dto.getRating());
         movieEntity.setCreationDate(dto.getCreationDate());
-        movieEntity.setGenre(dto.getGenreId());
+        movieEntity.setGenreId(dto.getGenreId());
 
         return movieEntity;
     }
@@ -29,7 +27,7 @@ public class MovieMapper {
         dto.setImage(entity.getImage());
         dto.setRating(entity.getRating());
         dto.setCreationDate(entity.getCreationDate());
-        dto.setGenreId(entity.getGenre());
+        dto.setGenreId(entity.getGenreId());
 
         return dto;
     }
