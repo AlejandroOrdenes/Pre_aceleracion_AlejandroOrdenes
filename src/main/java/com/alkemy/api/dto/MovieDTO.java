@@ -24,4 +24,6 @@ public class MovieDTO {
 
     private Long genreId;
 
+    private List<CharacterDTO> characters;
+
 }

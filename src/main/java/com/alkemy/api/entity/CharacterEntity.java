@@ -19,6 +19,8 @@ public class CharacterEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
+    private String image;
+
     private String name;
 
     private int age;

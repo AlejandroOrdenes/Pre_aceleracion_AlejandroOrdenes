@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class BasicCharacterDTO {
+public class CharacterBasicDTO {
     private String image;
 
     private String name;

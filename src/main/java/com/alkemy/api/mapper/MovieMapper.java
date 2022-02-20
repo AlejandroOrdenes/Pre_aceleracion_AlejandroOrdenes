@@ -1,7 +1,10 @@
 package com.alkemy.api.mapper;
 
+import com.alkemy.api.dto.CharacterDTO;
+import com.alkemy.api.dto.MovieBasicDTO;
 import com.alkemy.api.dto.MovieDTO;
 import com.alkemy.api.entity.MovieEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -9,8 +12,13 @@ import java.util.List;
 
 @Component
 public class MovieMapper {
-    public static MovieEntity movieDTO2Entity(MovieDTO dto) {
+
+    @Autowired
+    CharacterMapper characterMapper;
+
+    public MovieEntity movieDTO2Entity(MovieDTO dto) {
         MovieEntity movieEntity = new MovieEntity();
+        movieEntity.setId(dto.getId());
         movieEntity.setTitle(dto.getTitle());
         movieEntity.setImage(dto.getImage());
         movieEntity.setRating(dto.getRating());
@@ -20,23 +28,48 @@ public class MovieMapper {
         return movieEntity;
     }
 
-    public static MovieDTO movieEntity2Dto(MovieEntity entity) {
+    public MovieDTO movieEntity2Dto(MovieEntity entity, boolean loadCharacter) {
         MovieDTO dto = new MovieDTO();
         dto.setId(entity.getId());
-        dto.setTitle(dto.getTitle());
+        dto.setTitle(entity.getTitle());
         dto.setImage(entity.getImage());
         dto.setRating(entity.getRating());
         dto.setCreationDate(entity.getCreationDate());
         dto.setGenreId(entity.getGenreId());
+        if(loadCharacter) {
+            List<CharacterDTO> characterDTOS = characterMapper.characterEntityList2DTOList(entity.getCharacters(), false);
+            dto.setCharacters(characterDTOS);
+        }
+
+        return dto;
+    }
+    public MovieBasicDTO movieEntity2DtoBasic(MovieEntity entity) {
+        MovieBasicDTO dto = new MovieBasicDTO();
+        dto.setTitle(entity.getTitle());
+        dto.setImage(entity.getImage());
+        dto.setCreationDate(entity.getCreationDate());
 
         return dto;
     }
 
-    public List<MovieDTO> movieEntityList2DTOList(List<MovieEntity> entities) {
-        List<MovieDTO> dtos = new ArrayList<>();
+    public List<MovieBasicDTO> movieEntityBasicList2DtoBasicList(List<MovieEntity> entities) {
+        List<MovieBasicDTO> dtos = new ArrayList<>();
         for (MovieEntity entity : entities){
-            dtos.add(movieEntity2Dto(entity));
+            dtos.add(movieEntity2DtoBasic(entity));
         }
+
+
         return dtos;
     }
+
+    public List<MovieDTO> movieEntityList2DTOList(List<MovieEntity> entities, boolean loadCharacters) {
+        List<MovieDTO> dtos = new ArrayList<>();
+        for (MovieEntity entity : entities){
+            dtos.add(movieEntity2Dto(entity, loadCharacters));
+        }
+
+
+        return dtos;
+    }
+
 }
