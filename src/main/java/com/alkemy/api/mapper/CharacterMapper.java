@@ -6,6 +6,8 @@ import com.alkemy.api.dto.MovieBasicDTO;
 import com.alkemy.api.dto.MovieDTO;
 import com.alkemy.api.entity.CharacterEntity;
 import com.alkemy.api.entity.MovieEntity;
+import com.alkemy.api.service.CharacterService;
+import com.alkemy.api.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +20,13 @@ public class CharacterMapper {
     @Autowired
     MovieMapper movieMapper;
 
-    public CharacterEntity characterDTO2Entity(CharacterDTO dto) {
+    @Autowired
+    MovieService movieService;
+
+    @Autowired
+    CharacterService characterService;
+
+    public CharacterEntity characterDTO2Entity(CharacterDTO dto, boolean loadMovies) {
         CharacterEntity characterEntity = new CharacterEntity();
         characterEntity.setId(dto.getId());
         characterEntity.setImage(dto.getImage());
@@ -26,6 +34,11 @@ public class CharacterMapper {
         characterEntity.setName(dto.getName());
         characterEntity.setHistory(dto.getHistory());
         characterEntity.setWeight(dto.getWeight());
+
+        if (loadMovies) {
+            List<MovieEntity> entity = movieMapper.movieDTOList2EntityList(dto.getMovies(),false);
+            characterEntity.setMovies(entity);
+        }
 
         return characterEntity;
     }
@@ -38,8 +51,9 @@ public class CharacterMapper {
         dto.setName(entity.getName());
         dto.setHistory(entity.getHistory());
         dto.setWeight(entity.getWeight());
+
         if (loadMovies) {
-            List<MovieDTO> moviesDto = movieMapper.movieEntityList2DTOList(entity.getMovies(),false);
+            List<MovieDTO> moviesDto = this.movieMapper.movieEntityList2DTOList(entity.getMovies(),false);
             dto.setMovies(moviesDto);
         }
         return dto;
@@ -51,6 +65,14 @@ public class CharacterMapper {
             dtos.add(characterEntity2DTO(entity, loadMovies));
         }
         return dtos;
+    }
+
+    public List<CharacterEntity> characterDTOList2EntityList(List<CharacterDTO> dtos, boolean loadMovies) {
+        List<CharacterEntity> entity = new ArrayList<>();
+        for (CharacterDTO dto : dtos){
+            entity.add(characterDTO2Entity(dto, loadMovies));
+        }
+        return entity;
     }
 
     public CharacterBasicDTO characterEntity2DtoBasic(CharacterEntity entity) {

@@ -1,5 +1,6 @@
 package com.alkemy.api.entity;
 
+import com.alkemy.api.dto.MovieDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -31,5 +32,14 @@ public class CharacterEntity {
 
     @ManyToMany(mappedBy = "characters", cascade = CascadeType.MERGE)
     private List<MovieEntity> movies = new ArrayList<>();
+
+    public void addMovie(MovieEntity movie) {
+        movies.add(movie);
+    }
+
+    public void removeMovie(MovieEntity movie) {
+        movies.remove(movie);
+    }
+
 }
 

@@ -7,6 +7,5 @@ import lombok.Setter;
 @Setter
 public class CharacterBasicDTO {
     private String image;
-
     private String name;
 }

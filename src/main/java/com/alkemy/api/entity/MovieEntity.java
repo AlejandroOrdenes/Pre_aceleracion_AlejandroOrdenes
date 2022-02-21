@@ -1,6 +1,7 @@
 package com.alkemy.api.entity;
 
 
+import com.alkemy.api.dto.CharacterDTO;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
@@ -34,22 +35,27 @@ public class MovieEntity {
 
     private boolean deleted = Boolean.FALSE;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "genre_id",insertable = false, updatable = false)
     private GenreEntity genre;
 
     @Column(name = "genre_id", nullable = false)
     private Long genreId;
 
-    @ManyToMany(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-    },
-    fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(
             name = "movie_character",
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "character_Id"))
     private List<CharacterEntity> characters = new ArrayList<>();
 
+    public void addCharacter(CharacterEntity character) {
+        characters.add(character);
+        character.getMovies().add(this);
+    }
+
+    public void removeCharacter(CharacterEntity character) {
+        characters.remove(character);
+        character.getMovies().remove(this);
+    }
 }

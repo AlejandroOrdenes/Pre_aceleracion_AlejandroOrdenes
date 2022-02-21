@@ -3,6 +3,7 @@ package com.alkemy.api.mapper;
 import com.alkemy.api.dto.CharacterDTO;
 import com.alkemy.api.dto.MovieBasicDTO;
 import com.alkemy.api.dto.MovieDTO;
+import com.alkemy.api.entity.CharacterEntity;
 import com.alkemy.api.entity.MovieEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,7 +17,7 @@ public class MovieMapper {
     @Autowired
     CharacterMapper characterMapper;
 
-    public MovieEntity movieDTO2Entity(MovieDTO dto) {
+    public MovieEntity movieDTO2Entity(MovieDTO dto, boolean loadCharacters) {
         MovieEntity movieEntity = new MovieEntity();
         movieEntity.setId(dto.getId());
         movieEntity.setTitle(dto.getTitle());
@@ -24,6 +25,10 @@ public class MovieMapper {
         movieEntity.setRating(dto.getRating());
         movieEntity.setCreationDate(dto.getCreationDate());
         movieEntity.setGenreId(dto.getGenreId());
+        if (loadCharacters) {
+            List<CharacterEntity> entity = characterMapper.characterDTOList2EntityList(dto.getCharacters(),false);
+            movieEntity.setCharacters(entity);
+        }
 
         return movieEntity;
     }
@@ -57,8 +62,6 @@ public class MovieMapper {
         for (MovieEntity entity : entities){
             dtos.add(movieEntity2DtoBasic(entity));
         }
-
-
         return dtos;
     }
 
@@ -67,9 +70,15 @@ public class MovieMapper {
         for (MovieEntity entity : entities){
             dtos.add(movieEntity2Dto(entity, loadCharacters));
         }
-
-
         return dtos;
+    }
+
+    public List<MovieEntity> movieDTOList2EntityList(List<MovieDTO> dtos, boolean loadCharacters) {
+        List<MovieEntity> entity = new ArrayList<>();
+        for (MovieDTO dto : dtos){
+            entity.add(movieDTO2Entity(dto, false));
+        }
+        return entity;
     }
 
 }
