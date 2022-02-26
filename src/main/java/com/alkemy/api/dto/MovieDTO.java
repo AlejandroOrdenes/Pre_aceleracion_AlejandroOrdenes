@@ -2,6 +2,7 @@ package com.alkemy.api.dto;
 
 import com.alkemy.api.entity.CharacterEntity;
 import com.alkemy.api.entity.GenreEntity;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,6 +25,7 @@ public class MovieDTO {
 
     private Long genreId;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<CharacterDTO> characters;
 
 }

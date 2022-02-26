@@ -2,7 +2,6 @@ package com.alkemy.api.mapper;
 
 import com.alkemy.api.dto.CharacterBasicDTO;
 import com.alkemy.api.dto.CharacterDTO;
-import com.alkemy.api.dto.MovieBasicDTO;
 import com.alkemy.api.dto.MovieDTO;
 import com.alkemy.api.entity.CharacterEntity;
 import com.alkemy.api.entity.MovieEntity;
@@ -28,7 +27,6 @@ public class CharacterMapper {
 
     public CharacterEntity characterDTO2Entity(CharacterDTO dto, boolean loadMovies) {
         CharacterEntity characterEntity = new CharacterEntity();
-        characterEntity.setId(dto.getId());
         characterEntity.setImage(dto.getImage());
         characterEntity.setAge(dto.getAge());
         characterEntity.setName(dto.getName());
@@ -36,9 +34,10 @@ public class CharacterMapper {
         characterEntity.setWeight(dto.getWeight());
 
         if (loadMovies) {
-            List<MovieEntity> entity = movieMapper.movieDTOList2EntityList(dto.getMovies(),false);
+            List<MovieEntity> entity = movieMapper.movieDTOList2EntityList(dto.getMovies(), false);
             characterEntity.setMovies(entity);
         }
+
 
         return characterEntity;
     }
@@ -51,7 +50,6 @@ public class CharacterMapper {
         dto.setName(entity.getName());
         dto.setHistory(entity.getHistory());
         dto.setWeight(entity.getWeight());
-
         if (loadMovies) {
             List<MovieDTO> moviesDto = this.movieMapper.movieEntityList2DTOList(entity.getMovies(),false);
             dto.setMovies(moviesDto);
@@ -62,7 +60,7 @@ public class CharacterMapper {
     public List<CharacterDTO> characterEntityList2DTOList(List<CharacterEntity> entities, boolean loadMovies) {
         List<CharacterDTO> dtos = new ArrayList<>();
         for (CharacterEntity entity : entities){
-            dtos.add(characterEntity2DTO(entity, loadMovies));
+            dtos.add(characterEntity2DTO(entity, false));
         }
         return dtos;
     }
@@ -70,7 +68,7 @@ public class CharacterMapper {
     public List<CharacterEntity> characterDTOList2EntityList(List<CharacterDTO> dtos, boolean loadMovies) {
         List<CharacterEntity> entity = new ArrayList<>();
         for (CharacterDTO dto : dtos){
-            entity.add(characterDTO2Entity(dto, loadMovies));
+            entity.add(characterDTO2Entity(dto, false));
         }
         return entity;
     }
@@ -88,8 +86,18 @@ public class CharacterMapper {
         for (CharacterEntity entity : entities){
             dtos.add(characterEntity2DtoBasic(entity));
         }
-
-
         return dtos;
     }
+
+    public CharacterEntity updateData(CharacterEntity entity, CharacterDTO dto) {
+        entity.setName(dto.getName());
+        entity.setImage(dto.getImage());
+        entity.setAge(dto.getAge());
+        entity.setHistory(dto.getHistory());
+        entity.setWeight(dto.getWeight());
+
+        return entity;
+    }
+
+
 }

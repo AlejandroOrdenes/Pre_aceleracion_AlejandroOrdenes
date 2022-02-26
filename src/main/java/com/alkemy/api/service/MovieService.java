@@ -16,11 +16,11 @@ public interface MovieService {
 
     List<MovieDTO> getAllmovies();
 
-    MovieEntity getMovieById(Long idMovie);
+    MovieDTO getMovieById(Long idMovie);
 
     void addCharacter(Long id, Long idCharacter);
 
     void removeCharacter(Long id, Long idCharacter);
 
-//    List<MovieDTO> getByFilters(String name, Long genre, String order);
+    List<MovieDTO> getByFilters(String title, Long genre, String order);
 }

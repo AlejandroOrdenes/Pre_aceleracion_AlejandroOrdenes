@@ -1,6 +1,7 @@
 package com.alkemy.api.entity;
 
 import com.alkemy.api.dto.MovieDTO;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 

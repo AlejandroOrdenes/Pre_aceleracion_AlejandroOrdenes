@@ -26,10 +26,4 @@ public class GenreServiceImpl implements GenreService {
         return result;
     }
 
-    @Override
-    public List<GenreDTO> getAllGenres() {
-        List<GenreEntity> entities = genreRepository.findAll();
-        List<GenreDTO> result = genreMapper.genreEntityList2DTOList(entities);
-        return result;
-    }
 }

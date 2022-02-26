@@ -2,6 +2,7 @@ package com.alkemy.api.entity;
 
 
 import com.alkemy.api.dto.CharacterDTO;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
@@ -21,7 +22,8 @@ import java.util.List;
 public class MovieEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE
+    )
     private Long id;
 
     private String image;
@@ -42,7 +44,10 @@ public class MovieEntity {
     @Column(name = "genre_id", nullable = false)
     private Long genreId;
 
-    @ManyToMany(cascade = CascadeType.MERGE)
+
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE})
     @JoinTable(
             name = "movie_character",
             joinColumns = @JoinColumn(name = "movie_id"),

@@ -2,15 +2,13 @@ package com.alkemy.api.controllers;
 
 import com.alkemy.api.dto.CharacterBasicDTO;
 import com.alkemy.api.dto.CharacterDTO;
-import com.alkemy.api.dto.MovieDTO;
-import com.alkemy.api.entity.CharacterEntity;
 import com.alkemy.api.service.CharacterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.ResultSet;
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -27,15 +25,33 @@ public class CharacterController {
         return ResponseEntity.ok().body(characters);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<CharacterDTO> getCharacterById(@PathVariable Long id) {
+        CharacterDTO dto = characterService.getCharacterById(id);
+        return ResponseEntity.ok().body(dto);
+    }
+
+    @GetMapping("/filters")
+    public ResponseEntity<List<CharacterDTO>> getDetailsByFilters(
+            @RequestParam(required = false) String name,
+            @RequestParam(defaultValue ="0") int age,
+            @RequestParam(defaultValue = "0") float weight,
+            @RequestParam(required = false) Long movies
+    ) {
+        List<CharacterDTO> characters = characterService.getByFilters(name, age, weight, movies);
+        return ResponseEntity.ok(characters);
+
+    }
+
 
     @PostMapping
-    public ResponseEntity<CharacterDTO> save(@RequestBody CharacterDTO character){
+    public ResponseEntity<CharacterDTO> save(@Valid @RequestBody CharacterDTO character){
         CharacterDTO savedCharacter = characterService.save(character);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedCharacter);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CharacterDTO> update(@RequestBody CharacterDTO character, @PathVariable Long id){
+    public ResponseEntity<CharacterDTO> update(@Valid @RequestBody CharacterDTO character, @PathVariable Long id){
         CharacterDTO updateCharacter = characterService.update(id, character);
         return ResponseEntity.status(HttpStatus.CREATED).body(updateCharacter);
     }
@@ -46,15 +62,4 @@ public class CharacterController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @PostMapping("/{id}/movie/{idMovie}")
-    public ResponseEntity<Void> addMovie(@PathVariable Long id, @PathVariable Long idMovie) {
-        this.characterService.addMovie(id, idMovie);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
-
-    @DeleteMapping("/{id}/movie/{idMovie}")
-    public ResponseEntity<Void> removeMovie(@PathVariable Long id, @PathVariable Long idMovie) {
-        this.characterService.removeMovie(id, idMovie);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
 }

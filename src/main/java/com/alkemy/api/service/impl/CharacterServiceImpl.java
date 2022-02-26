@@ -1,11 +1,12 @@
 package com.alkemy.api.service.impl;
 
-import com.alkemy.api.dto.CharacterBasicDTO;
-import com.alkemy.api.dto.CharacterDTO;
+import com.alkemy.api.dto.*;
 import com.alkemy.api.entity.CharacterEntity;
 import com.alkemy.api.entity.MovieEntity;
 import com.alkemy.api.mapper.CharacterMapper;
 import com.alkemy.api.repository.CharacterRepository;
+import com.alkemy.api.repository.MovieRepository;
+import com.alkemy.api.repository.specification.CharacterSpecification;
 import com.alkemy.api.service.CharacterService;
 import com.alkemy.api.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,13 @@ public class CharacterServiceImpl implements CharacterService {
 
     @Autowired
     MovieService movieService;
+
+    @Autowired
+    MovieRepository movieRepository;
+
+    @Autowired
+    CharacterSpecification characterSpecification;
+
 
 
     public CharacterDTO save(CharacterDTO dto) {
@@ -49,37 +57,33 @@ public class CharacterServiceImpl implements CharacterService {
 
     @Override
     public CharacterDTO update(Long id, CharacterDTO character) {
-        Optional<CharacterEntity> entity = characterRepository.findById(id);
-        if( !entity.isPresent() ) {
+        Optional<CharacterEntity> entityOpt = characterRepository.findById(id);
+        if( !entityOpt.isPresent() ) {
             throw new Error("Character Id Not Found");
         }
-        save(character);
+        CharacterEntity newEntity = characterMapper.updateData(entityOpt.get(), character);
+        characterRepository.save(newEntity);
+        CharacterDTO dto = characterMapper.characterEntity2DTO(newEntity, true);
 
-        return character;
+        return dto;
     }
 
 
-    public void addMovie(Long id, Long idMovie) {
-        CharacterEntity entity = this.characterRepository.getById(id);
-        entity.getMovies().size();
-        MovieEntity movieEntity = this.movieService.getMovieById(idMovie);
-        entity.addMovie(movieEntity);
-        this.characterRepository.save(entity);
-    }
-
-    public void removeMovie(Long id, Long idMovie) {
-        CharacterEntity entity = this.characterRepository.getById(id);
-        entity.getMovies().size();
-        MovieEntity movieEntity = this.movieService.getMovieById(idMovie);
-        entity.removeMovie(movieEntity);
-        this.characterRepository.save(entity);
-    }
 
     @Override
-    public CharacterEntity getCharacterById(Long idCharacter) {
+    public CharacterDTO getCharacterById(Long idCharacter) {
         Optional<CharacterEntity> entityOpt = characterRepository.findById(idCharacter);
-        CharacterEntity entity = entityOpt.get();
-        return entity;
+        CharacterEntity entityGet = entityOpt.get();
+        CharacterDTO dto = characterMapper.characterEntity2DTO(entityGet, true);
+        return dto;
     }
+
+    public List<CharacterDTO> getByFilters(String name, int age, float weight, Long movies) {
+        CharacterFiltersDTO filtersDTO = new CharacterFiltersDTO(name, age, weight, movies);
+        List<CharacterEntity> entities = this.characterRepository.findAll(this.characterSpecification.getByFilters(filtersDTO));
+        List<CharacterDTO> dtos = characterMapper.characterEntityList2DTOList(entities, false);
+        return dtos;
+    }
+
 
 }

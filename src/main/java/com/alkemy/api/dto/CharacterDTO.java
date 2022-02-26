@@ -1,6 +1,7 @@
 package com.alkemy.api.dto;
 
 import com.alkemy.api.entity.MovieEntity;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,10 +22,7 @@ public class CharacterDTO {
 
     private String history;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<MovieDTO> movies;
 
-
-    public void addMovie(MovieDTO movieById) {
-            movies.add(movieById);
-    }
 }

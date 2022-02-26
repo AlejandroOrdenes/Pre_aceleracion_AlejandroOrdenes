@@ -12,4 +12,5 @@ public class MovieBasicDTO {
     private String image;
     private LocalDate creationDate;
 
+
 }

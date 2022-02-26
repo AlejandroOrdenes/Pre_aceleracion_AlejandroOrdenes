@@ -1,10 +1,12 @@
 package com.alkemy.api.service.impl;
 
+import com.alkemy.api.dto.CharacterDTO;
 import com.alkemy.api.dto.MovieDTO;
 import com.alkemy.api.dto.MovieFiltersDTO;
 import com.alkemy.api.entity.CharacterEntity;
 import com.alkemy.api.entity.MovieEntity;
 import com.alkemy.api.mapper.MovieMapper;
+import com.alkemy.api.repository.CharacterRepository;
 import com.alkemy.api.repository.MovieRepository;
 import com.alkemy.api.repository.specification.MovieSpecifications;
 import com.alkemy.api.service.CharacterService;
@@ -26,7 +28,13 @@ public class MovieServiceImpl implements MovieService {
     private MovieRepository movieRepository;
 
     @Autowired
+    MovieService movieService;
+
+    @Autowired
     CharacterService characterService;
+
+    @Autowired
+    CharacterRepository characterRepository;
 
     public MovieDTO save(MovieDTO dto) {
         MovieEntity entity = movieMapper.movieDTO2Entity(dto, true);
@@ -43,10 +51,11 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public MovieEntity getMovieById(Long idMovie) {
-        Optional<MovieEntity> entityOpt = movieRepository.findById(idMovie);
-        MovieEntity entity = entityOpt.get();
-        return entity;
+    public MovieDTO getMovieById(Long idMovie) {
+        Optional<MovieEntity> entity = movieRepository.findById(idMovie);
+        MovieEntity entityGet = entity.get();
+        MovieDTO movieDTO = movieMapper.movieEntity2Dto(entityGet, true);
+        return movieDTO;
     }
 
     @Override
@@ -60,16 +69,19 @@ public class MovieServiceImpl implements MovieService {
         if( !entity.isPresent() ) {
             throw new Error("Movie Id Not Found");
         }
-        save(movie);
-        return movie;
+        MovieEntity newEntity = movieMapper.updateData(entity.get(), movie);
+        movieRepository.save(newEntity);
+        MovieDTO dto = movieMapper.movieEntity2Dto(newEntity, true);
+        return dto;
     }
 
     @Override
     public void addCharacter(Long id, Long idCharacter) {
-        MovieEntity entity = this.movieRepository.getById(id);
+        MovieEntity entity = movieRepository.getById(id);
         entity.getCharacters().size();
-        CharacterEntity characterEntity = this.characterService.getCharacterById(idCharacter);
+        CharacterEntity characterEntity = characterRepository.getById(idCharacter);
         entity.addCharacter(characterEntity);
+        characterEntity.addMovie(entity);
         this.movieRepository.save(entity);
     }
 
@@ -77,17 +89,19 @@ public class MovieServiceImpl implements MovieService {
     public void removeCharacter(Long id, Long idCharacter) {
         MovieEntity entity = this.movieRepository.getById(id);
         entity.getCharacters().size();
-        CharacterEntity characterEntity = this.characterService.getCharacterById(idCharacter);
+        CharacterEntity characterEntity = characterRepository.getById(idCharacter);
         entity.removeCharacter(characterEntity);
         this.movieRepository.save(entity);
     }
 
-/*    @Override
-    public List<MovieDTO> getByFilters(String name, Long genre, String order) {
-        MovieFiltersDTO filtersDTO = new MovieFiltersDTO(name, genre, order);
+    public List<MovieDTO> getByFilters(String title, Long genreId, String order) {
+        MovieFiltersDTO filtersDTO = new MovieFiltersDTO(title, genreId, order);
         List<MovieEntity> entities = this.movieRepository.findAll(this.movieSpecifications.getByFilters(filtersDTO));
-        return null;
-    }*/
+        List<MovieDTO> dtos = movieMapper.movieEntityList2DTOList(entities, false);
+        return dtos;
+    }
+
+
 
 
 }

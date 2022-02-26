@@ -1,16 +1,14 @@
 package com.alkemy.api.controllers;
 
-import com.alkemy.api.dto.GenreDTO;
-import com.alkemy.api.dto.MovieBasicDTO;
+
 import com.alkemy.api.dto.MovieDTO;
-import com.alkemy.api.entity.MovieEntity;
 import com.alkemy.api.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.ResultSet;
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -27,23 +25,30 @@ public class MovieController {
         return ResponseEntity.ok().body(movies);
     }
 
-/*    @GetMapping
-    public ResponseEntity<List<MovieDTO>> getDetailByFilters(
-            @RequestParam(required = false) String name,
-            @RequestParam(required = false) Long genre,
-            @RequestParam(required = false, defaultValue = "ASC") String order) {
-        List<MovieDTO> movies = this.movieService.getByFilters(name, genre, order);
+    @GetMapping("/{id}")
+    public ResponseEntity<MovieDTO> getMovieById(@PathVariable Long id) {
+        MovieDTO movie = movieService.getMovieById(id);
+        return ResponseEntity.ok().body(movie);
+    }
+
+    @GetMapping("/filters")
+    public ResponseEntity<List<MovieDTO>> getDetailsByFilters(
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) Long genreId,
+            @RequestParam(required = false, defaultValue = "ASC") String order
+    ) {
+        List<MovieDTO> movies = movieService.getByFilters(title, genreId, order);
         return ResponseEntity.ok(movies);
-    }*/
+    }
 
     @PostMapping
-    public ResponseEntity<MovieDTO> save(@RequestBody MovieDTO movie){
+    public ResponseEntity<MovieDTO> save( @Valid @RequestBody MovieDTO movie){
         MovieDTO savedMovie = this.movieService.save(movie);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedMovie);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<MovieDTO> update(@RequestBody MovieDTO movie, @PathVariable Long id){
+    public ResponseEntity<MovieDTO> update( @Valid @RequestBody MovieDTO movie, @PathVariable Long id){
         MovieDTO updateMovie = this.movieService.update(id, movie);
         return ResponseEntity.status(HttpStatus.CREATED).body(updateMovie);
     }
