@@ -1,7 +1,7 @@
 package com.alkemy.api.auth.service;
 
 import com.alkemy.api.auth.dto.UserDTO;
-import com.alkemy.api.auth.entity.UserEntity;
+import com.alkemy.api.auth.filter.entity.UserEntity;
 import com.alkemy.api.auth.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
@@ -19,8 +19,8 @@ public class UserDetailsCustomService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private EmailService emailService;
+/*    @Autowired
+    private EmailService emailService;*/
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -33,12 +33,12 @@ public class UserDetailsCustomService implements UserDetailsService {
 
     public boolean save(@Valid UserDTO userDTO) {
         UserEntity userEntity = new UserEntity();
-        userEntity.setUsername(userDTO.getUsername());
+        userEntity.setUserName(userDTO.getUserName());
         userEntity.setPassword(userDTO.getPassword());
         userEntity = this.userRepository.save(userEntity);
-        if(userEntity != null) {
+/*        if(userEntity != null) {
             emailService.sendWelcomeEmailTo(userEntity.getUsername());
-        }
+        }*/
         return userEntity != null;
     }
 }

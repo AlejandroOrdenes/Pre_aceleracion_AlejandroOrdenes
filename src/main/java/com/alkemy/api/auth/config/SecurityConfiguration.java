@@ -1,5 +1,6 @@
 package com.alkemy.api.auth.config;
 
+import com.alkemy.api.auth.filter.JwtRequestFilter;
 import com.alkemy.api.auth.service.UserDetailsCustomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

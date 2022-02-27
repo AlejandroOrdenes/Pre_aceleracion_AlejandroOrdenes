@@ -1,8 +1,7 @@
 package com.alkemy.api.service;
 
-import com.alkemy.api.dto.MovieBasicDTO;
 import com.alkemy.api.dto.MovieDTO;
-import com.alkemy.api.entity.MovieEntity;
+
 
 import java.util.List;
 

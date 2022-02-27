@@ -1,6 +1,6 @@
 package com.alkemy.api.auth.repository;
 
-import com.alkemy.api.auth.entity.UserEntity;
+import com.alkemy.api.auth.filter.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
