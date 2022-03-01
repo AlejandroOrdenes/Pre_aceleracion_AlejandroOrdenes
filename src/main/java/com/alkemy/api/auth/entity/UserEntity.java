@@ -1,4 +1,4 @@
-package com.alkemy.api.auth.filter.entity;
+package com.alkemy.api.auth.entity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -38,7 +38,7 @@ public class UserEntity implements UserDetails {
         this.enabled = true;
     }
 
-    public Long getId() { return id; }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -49,5 +49,10 @@ public class UserEntity implements UserDetails {
     public String getUsername() {
         return userName;
     }
+
+    public String getUserName() {
+        return null;
+    }
+
 
 }

@@ -13,6 +13,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +28,7 @@ public class UserAuthController {
         private UserDetailsCustomService userDetailsService;
         private AuthenticationManager authenticationManager;
         private JwtUtils jwtTokenUtil;
+
 
         @Autowired
         public UserAuthController(
@@ -52,7 +54,7 @@ public class UserAuthController {
             UserDetails userDetails;
             try {
                 Authentication auth = authenticationManager.authenticate(
-                        new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword() )
+                        new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
                 );
                 userDetails = (UserDetails) auth.getPrincipal();
             } catch (BadCredentialsException e) {
