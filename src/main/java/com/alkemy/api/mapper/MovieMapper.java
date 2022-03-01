@@ -25,7 +25,7 @@ public class MovieMapper {
         movieEntity.setCreationDate(dto.getCreationDate());
         movieEntity.setGenreId(dto.getGenreId());
         if (loadCharacters) {
-            List<CharacterEntity> entity = characterMapper.characterDTOList2EntityList(dto.getCharacters(),false);
+            List<CharacterEntity> entity = characterMapper.characterDTOList2EntityList(dto.getCharacters(),true);
             movieEntity.setCharacters(entity);
         }
 
@@ -41,7 +41,7 @@ public class MovieMapper {
         dto.setCreationDate(entity.getCreationDate());
         dto.setGenreId(entity.getGenreId());
         if(loadCharacter) {
-            List<CharacterDTO> characterDTOS = characterMapper.characterEntityList2DTOList(entity.getCharacters(), false);
+            List<CharacterDTO> characterDTOS = characterMapper.characterEntityList2DTOList(entity.getCharacters(), true);
             dto.setCharacters(characterDTOS);
         }
 
@@ -67,7 +67,7 @@ public class MovieMapper {
     public List<MovieDTO> movieEntityList2DTOList(List<MovieEntity> entities, boolean loadCharacters) {
         List<MovieDTO> dtos = new ArrayList<>();
         for (MovieEntity entity : entities){
-            dtos.add(movieEntity2Dto(entity, false));
+            dtos.add(movieEntity2Dto(entity, true));
         }
         return dtos;
     }

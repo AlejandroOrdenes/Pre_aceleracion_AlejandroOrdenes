@@ -97,7 +97,7 @@ public class MovieServiceImpl implements MovieService {
     public List<MovieDTO> getByFilters(String title, Long genreId, String order) {
         MovieFiltersDTO filtersDTO = new MovieFiltersDTO(title, genreId, order);
         List<MovieEntity> entities = this.movieRepository.findAll(this.movieSpecifications.getByFilters(filtersDTO));
-        List<MovieDTO> dtos = movieMapper.movieEntityList2DTOList(entities, false);
+        List<MovieDTO> dtos = movieMapper.movieEntityList2DTOList(entities, true);
         return dtos;
     }
 
