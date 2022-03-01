@@ -5,6 +5,7 @@ import com.alkemy.api.dto.MovieDTO;
 import com.alkemy.api.dto.MovieFiltersDTO;
 import com.alkemy.api.entity.CharacterEntity;
 import com.alkemy.api.entity.MovieEntity;
+import com.alkemy.api.exception.ParamNotFound;
 import com.alkemy.api.mapper.MovieMapper;
 import com.alkemy.api.repository.CharacterRepository;
 import com.alkemy.api.repository.MovieRepository;
@@ -67,7 +68,7 @@ public class MovieServiceImpl implements MovieService {
     public MovieDTO update(Long id, MovieDTO movie) {
         Optional<MovieEntity> entity = movieRepository.findById(id);
         if( !entity.isPresent() ) {
-            throw new Error("Movie Id Not Found");
+            throw new ParamNotFound("Movie Id Not Found");
         }
         MovieEntity newEntity = movieMapper.updateData(entity.get(), movie);
         movieRepository.save(newEntity);
