@@ -1,11 +1,17 @@
 package com.alkemy.api.repository.specification;
 
 import com.alkemy.api.dto.CharacterFiltersDTO;
+import com.alkemy.api.dto.MovieDTO;
 import com.alkemy.api.entity.CharacterEntity;
+import com.alkemy.api.entity.MovieEntity;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,12 +44,11 @@ public class CharacterSpecification {
                 );
             }
 
-/*            if (filtersDTO.getMovies() != null) {
-                predicates.add(
-                        criteriaBuilder.like(root.get("movies").as(String.class),
-                                "%" + filtersDTO.getMovies() + "%")
-                );
-            }*/
+            if (!CollectionUtils.isEmpty(filtersDTO.getMovies())) {
+                Join<MovieEntity, CharacterEntity> join = root.join("movies", JoinType.INNER);
+                Expression<String> moviesId = join.get("id");
+                predicates.add(moviesId.in(filtersDTO.getMovies()));
+            }
 
 
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));

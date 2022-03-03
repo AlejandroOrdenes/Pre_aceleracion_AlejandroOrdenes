@@ -1,5 +1,6 @@
 package com.alkemy.api.service;
 
+import com.alkemy.api.dto.MovieBasicDTO;
 import com.alkemy.api.dto.MovieDTO;
 
 
@@ -13,9 +14,9 @@ public interface MovieService {
 
     MovieDTO update(Long id, MovieDTO movie);
 
-    List<MovieDTO> getAllmovies();
+    List<MovieBasicDTO> getAll();
 
-    MovieDTO getMovieById(Long idMovie);
+    MovieDTO getById(Long idMovie);
 
     void addCharacter(Long id, Long idCharacter);
 

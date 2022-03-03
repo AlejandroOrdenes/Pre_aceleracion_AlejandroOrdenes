@@ -1,6 +1,6 @@
 package com.alkemy.api.service.impl;
 
-import com.alkemy.api.dto.CharacterDTO;
+import com.alkemy.api.dto.MovieBasicDTO;
 import com.alkemy.api.dto.MovieDTO;
 import com.alkemy.api.dto.MovieFiltersDTO;
 import com.alkemy.api.entity.CharacterEntity;
@@ -10,10 +10,10 @@ import com.alkemy.api.mapper.MovieMapper;
 import com.alkemy.api.repository.CharacterRepository;
 import com.alkemy.api.repository.MovieRepository;
 import com.alkemy.api.repository.specification.MovieSpecifications;
-import com.alkemy.api.service.CharacterService;
 import com.alkemy.api.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -29,13 +29,11 @@ public class MovieServiceImpl implements MovieService {
     private MovieRepository movieRepository;
 
     @Autowired
-    MovieService movieService;
+    private MovieService movieService;
+
 
     @Autowired
-    CharacterService characterService;
-
-    @Autowired
-    CharacterRepository characterRepository;
+    private CharacterRepository characterRepository;
 
     public MovieDTO save(MovieDTO dto) {
         MovieEntity entity = movieMapper.movieDTO2Entity(dto, true);
@@ -45,14 +43,14 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public List<MovieDTO> getAllmovies() {
+    public List<MovieBasicDTO> getAll() {
         List<MovieEntity> entities = movieRepository.findAll();
-        List<MovieDTO> result = movieMapper.movieEntityList2DTOList(entities, true);
+        List<MovieBasicDTO> result = movieMapper.movieEntityBasicList2DtoBasicList(entities);
         return result;
     }
 
     @Override
-    public MovieDTO getMovieById(Long idMovie) {
+    public MovieDTO getById(Long idMovie) {
         Optional<MovieEntity> entity = movieRepository.findById(idMovie);
         MovieEntity entityGet = entity.get();
         MovieDTO movieDTO = movieMapper.movieEntity2Dto(entityGet, true);
@@ -61,6 +59,10 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public void delete(Long id) {
+        Optional<MovieEntity> entity = movieRepository.findById(id);
+        if (!entity.isPresent()) {
+            throw new ParamNotFound("Movie id Not found");
+        }
         movieRepository.deleteById(id);
     }
 

@@ -1,6 +1,7 @@
 package com.alkemy.api.controllers;
 
 
+import com.alkemy.api.dto.MovieBasicDTO;
 import com.alkemy.api.dto.MovieDTO;
 import com.alkemy.api.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +21,14 @@ public class MovieController {
 
 
     @GetMapping
-    public ResponseEntity<List<MovieDTO>> getAll() {
-        List<MovieDTO> movies = movieService.getAllmovies();
+    public ResponseEntity<List<MovieBasicDTO>> getAll() {
+        List<MovieBasicDTO> movies = movieService.getAll();
         return ResponseEntity.ok().body(movies);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<MovieDTO> getMovieById(@PathVariable Long id) {
-        MovieDTO movie = movieService.getMovieById(id);
+        MovieDTO movie = movieService.getById(id);
         return ResponseEntity.ok().body(movie);
     }
 

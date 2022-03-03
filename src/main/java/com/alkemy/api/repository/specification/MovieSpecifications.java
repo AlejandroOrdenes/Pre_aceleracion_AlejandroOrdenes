@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.criteria.Predicate;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,13 +36,12 @@ public class MovieSpecifications {
               );
           }
 
-/*          if (filtersDTO.getOrder() != null) {
-              String orderByField = String.valueOf(criteriaBuilder.lower(root.get("order")));
-              query.orderBy(
-                      filtersDTO.isASC() ?
-                              criteriaBuilder.asc(root.get(orderByField)) :
-                              criteriaBuilder.desc(root.get(orderByField))
-              );*/
+          String orderByField = "creationDate";
+          query.orderBy(
+                  filtersDTO.isASC() ?
+                          criteriaBuilder.asc(root.get(orderByField)) :
+                          criteriaBuilder.desc(root.get(orderByField))
+          );
 
           return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
       };

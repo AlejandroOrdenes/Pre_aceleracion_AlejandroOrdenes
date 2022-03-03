@@ -2,6 +2,7 @@ package com.alkemy.api.controllers;
 
 import com.alkemy.api.dto.CharacterBasicDTO;
 import com.alkemy.api.dto.CharacterDTO;
+import com.alkemy.api.dto.MovieDTO;
 import com.alkemy.api.service.CharacterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,14 +21,14 @@ public class CharacterController {
 
     @GetMapping
     public ResponseEntity<List<CharacterBasicDTO>> getAll() {
-        List<CharacterBasicDTO> characters = characterService.getAllCharacters();
+        List<CharacterBasicDTO> characters = characterService.getAll();
 
         return ResponseEntity.ok().body(characters);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<CharacterDTO> getCharacterById(@PathVariable Long id) {
-        CharacterDTO dto = characterService.getCharacterById(id);
+        CharacterDTO dto = characterService.getById(id);
         return ResponseEntity.ok().body(dto);
     }
 
@@ -35,8 +36,8 @@ public class CharacterController {
     public ResponseEntity<List<CharacterDTO>> getDetailsByFilters(
             @RequestParam(required = false) String name,
             @RequestParam(defaultValue ="0") int age,
-            @RequestParam(defaultValue = "0") float weight,
-            @RequestParam(required = false) Long movies
+            @RequestParam(defaultValue = "0") int weight,
+            @RequestParam(required = false) List<Long> movies
     ) {
         List<CharacterDTO> characters = characterService.getByFilters(name, age, weight, movies);
         return ResponseEntity.ok(characters);

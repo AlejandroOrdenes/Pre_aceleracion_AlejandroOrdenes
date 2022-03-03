@@ -9,7 +9,6 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class ApiErrorDTO {
-
     private HttpStatus status;
     private String message;
     private List<String> errors;

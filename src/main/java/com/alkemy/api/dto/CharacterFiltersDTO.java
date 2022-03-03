@@ -11,14 +11,13 @@ import java.util.List;
 public class CharacterFiltersDTO {
     private String name;
     private int age;
-    private float weight;
-    private Long movies;
+    private int weight;
+    private List<Long> movies;
 
-    public CharacterFiltersDTO(String name, int age, float weight, Long movies) {
+    public CharacterFiltersDTO(String name, int age, int weight, List<Long> movies) {
         this.name = name;
         this.age = age;
         this.weight = weight;
         this.movies = movies;
     }
-
 }

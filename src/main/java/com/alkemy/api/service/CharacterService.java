@@ -2,19 +2,20 @@ package com.alkemy.api.service;
 
 import com.alkemy.api.dto.CharacterBasicDTO;
 import com.alkemy.api.dto.CharacterDTO;
+import com.alkemy.api.dto.MovieDTO;
 
 import java.util.List;
 
 public interface CharacterService {
     CharacterDTO save(CharacterDTO character);
 
-    List<CharacterBasicDTO> getAllCharacters();
+    List<CharacterBasicDTO> getAll();
 
     void delete(Long id);
 
     CharacterDTO update(Long id, CharacterDTO character);
 
-    CharacterDTO getCharacterById(Long idCharacter);
+    CharacterDTO getById(Long idCharacter);
 
-    List<CharacterDTO> getByFilters(String name, int age, float weight, Long movies);
+    List<CharacterDTO> getByFilters(String name, int age, int weight, List<Long> movies);
 }

@@ -3,6 +3,7 @@ package com.alkemy.api.auth.service;
 import com.alkemy.api.auth.dto.UserDTO;
 import com.alkemy.api.auth.entity.UserEntity;
 import com.alkemy.api.auth.repository.UserRepository;
+import com.alkemy.api.exception.ParamNotFound;
 import com.alkemy.api.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
@@ -39,6 +40,10 @@ public class UserDetailsCustomService implements UserDetailsService {
 
     public boolean save(@Valid UserDTO userDTO) throws IOException {
         UserEntity userEntity = new UserEntity();
+        UserEntity findUser = this.userRepository.findByUserName(userDTO.getUserName());
+        if (findUser != null) {
+            throw new ParamNotFound("Username already exist");
+        }
         userEntity.setUserName(userDTO.getUserName());
         userEntity.setPassword(encoder.encode(userDTO.getPassword()));
         userEntity = this.userRepository.save(userEntity);

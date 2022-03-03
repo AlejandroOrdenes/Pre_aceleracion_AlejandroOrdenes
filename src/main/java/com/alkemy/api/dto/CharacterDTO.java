@@ -1,15 +1,21 @@
 package com.alkemy.api.dto;
 
 import com.alkemy.api.entity.MovieEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.util.List;
 
 @Getter
 @Setter
 public class CharacterDTO {
+
     private Long id;
 
     private String image;

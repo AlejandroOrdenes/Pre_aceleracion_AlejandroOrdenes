@@ -3,9 +3,9 @@ package com.alkemy.api.service.impl;
 import com.alkemy.api.dto.*;
 import com.alkemy.api.entity.CharacterEntity;
 import com.alkemy.api.entity.MovieEntity;
+import com.alkemy.api.exception.ParamNotFound;
 import com.alkemy.api.mapper.CharacterMapper;
 import com.alkemy.api.repository.CharacterRepository;
-import com.alkemy.api.repository.MovieRepository;
 import com.alkemy.api.repository.specification.CharacterSpecification;
 import com.alkemy.api.service.CharacterService;
 import com.alkemy.api.service.MovieService;
@@ -19,19 +19,16 @@ import java.util.Optional;
 public class CharacterServiceImpl implements CharacterService {
 
     @Autowired
-    CharacterMapper characterMapper;
+    private CharacterMapper characterMapper;
 
     @Autowired
-    CharacterRepository characterRepository;
+    private CharacterRepository characterRepository;
 
     @Autowired
-    MovieService movieService;
+    private CharacterSpecification characterSpecification;
 
     @Autowired
-    MovieRepository movieRepository;
-
-    @Autowired
-    CharacterSpecification characterSpecification;
+    private MovieService movieService;
 
 
 
@@ -44,7 +41,7 @@ public class CharacterServiceImpl implements CharacterService {
     }
 
     @Override
-    public List<CharacterBasicDTO> getAllCharacters() {
+    public List<CharacterBasicDTO> getAll() {
         List<CharacterEntity> entities = characterRepository.findAll();
         List<CharacterBasicDTO> result = characterMapper.characterEntityBasicList2DtoBasicList(entities);
         return result;
@@ -52,13 +49,18 @@ public class CharacterServiceImpl implements CharacterService {
 
     @Override
     public void delete(Long id) {
+        Optional<CharacterEntity> entity = characterRepository.findById(id);
+        if (!entity.isPresent()) {
+            throw new ParamNotFound("Character Id Not found");
+        }
         characterRepository.deleteById(id);
+
     }
 
     @Override
     public CharacterDTO update(Long id, CharacterDTO character) {
         Optional<CharacterEntity> entityOpt = characterRepository.findById(id);
-        if( !entityOpt.isPresent() ) {
+        if(entityOpt.isEmpty()) {
             throw new Error("Character Id Not Found");
         }
         CharacterEntity newEntity = characterMapper.updateData(entityOpt.get(), character);
@@ -71,17 +73,17 @@ public class CharacterServiceImpl implements CharacterService {
 
 
     @Override
-    public CharacterDTO getCharacterById(Long idCharacter) {
+    public CharacterDTO getById(Long idCharacter) {
         Optional<CharacterEntity> entityOpt = characterRepository.findById(idCharacter);
         CharacterEntity entityGet = entityOpt.get();
         CharacterDTO dto = characterMapper.characterEntity2DTO(entityGet, true);
         return dto;
     }
 
-    public List<CharacterDTO> getByFilters(String name, int age, float weight, Long movies) {
+    public List<CharacterDTO> getByFilters(String name, int age, int weight, List<Long> movies) {
         CharacterFiltersDTO filtersDTO = new CharacterFiltersDTO(name, age, weight, movies);
         List<CharacterEntity> entities = this.characterRepository.findAll(this.characterSpecification.getByFilters(filtersDTO));
-        List<CharacterDTO> dtos = characterMapper.characterEntityList2DTOList(entities, false);
+        List<CharacterDTO> dtos = characterMapper.characterEntityList2DTOList(entities, true);
         return dtos;
     }
 
