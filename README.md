@@ -1,6 +1,6 @@
 # DisneyApi
 
-#### Aplicación creada para el manejo de Películas/Series Disney, con sus respectivos personajes y detalles.
+#### API de Películas/Series Disney.
 
 ## Users
 
@@ -646,9 +646,4 @@ curl --location --request PUT 'http://localhost:8080/characters/2' \
 ```
 curl --location --request DELETE 'http://localhost:8080/characters/2' \
 --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYW5ub2ZAZ21haWwuY29tIiwiaWF0Ijox
-```
-#### View More
-
-```
-Documentation Settings
 ```
