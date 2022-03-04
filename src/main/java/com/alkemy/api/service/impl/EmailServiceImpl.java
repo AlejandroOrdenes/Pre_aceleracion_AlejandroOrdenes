@@ -1,5 +1,6 @@
 package com.alkemy.api.service.impl;
 
+import com.alkemy.api.ApiApplication;
 import com.alkemy.api.service.EmailService;
 import com.sendgrid.Method;
 import com.sendgrid.Request;
@@ -8,9 +9,12 @@ import com.sendgrid.SendGrid;
 import com.sendgrid.helpers.mail.Mail;
 import com.sendgrid.helpers.mail.objects.Content;
 import com.sendgrid.helpers.mail.objects.Email;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -28,6 +32,7 @@ public class EmailServiceImpl implements EmailService {
     @Value("${alkemy.api.email.enabled}")
     private boolean enabled;
 
+    private static final Logger logger = LogManager.getLogger(ApiApplication.class);
 
     public void sendWelcomeEmailTo(String to) throws IOException {
         if (!enabled) {
@@ -52,11 +57,10 @@ public class EmailServiceImpl implements EmailService {
             request.setBody(mail.build());
             Response response = sg.api(request);
 
-            System.out.println(response.getStatusCode());
-            System.out.println(response.getBody());
-            System.out.println(response.getHeaders());
-        } catch (Exception ex) {
-            System.out.println("Error trying to send the email");
+            logger.info(response.getStatusCode());
+            logger.info(response.getHeaders());
+        } catch (IOException ex) {
+            logger.error(ex);
         }
 
     }
