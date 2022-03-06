@@ -39,7 +39,6 @@ public class UserEntity implements UserDetails {
     }
 
 
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
@@ -48,10 +47,6 @@ public class UserEntity implements UserDetails {
     @Override
     public String getUsername() {
         return userName;
-    }
-
-    public String getUserName() {
-        return null;
     }
 
 
